@@ -102,9 +102,6 @@ void MyPlayer::Update() //Updates 60 frames per a second
   
 	Blaster.setPosition(Pos);
 }
-
-*StrategyInterface.h
-
 ```
 
 **Without if statement**
@@ -115,6 +112,7 @@ Calls an uneeded if statement each frame and looks overly complicated
 void MyPlayer::Update()
 {
   if (KeyboardMode == True)
+  {
   	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
   	{
   		player->MoveLeft();
@@ -131,18 +129,18 @@ void MyPlayer::Update()
   	{
   		player->MoveDown();
   	}
+  }
   else
   {
-    	if (x == 0) blaster->MoveLeft(); //Left/Right
+	if (x == 0) blaster->MoveLeft(); //Left/Right
 
-	    if (x == 1) blaster->MoveRight(); //Left/Right
+	if (x == 1) blaster->MoveRight(); //Left/Right
 
-	    if (y == 0) blaster->MoveUp(); //Down
+	if (y == 0) blaster->MoveUp(); //Down
 
-	    if (y == 1) blaster->MoveDown(); //Up
+	if (y == 1) blaster->MoveDown(); //Up
   }
-
-	Blaster.setPosition(Pos);
+  Blaster.setPosition(Pos);
 }
 
 void MyPlayer::Alarm4()
@@ -185,5 +183,7 @@ void CentipedeHead::Update() //Updates 60 frames per a second
 ```
 
 ## Command Pattern 
-###Score Example
+### Score Example
+
+
 
