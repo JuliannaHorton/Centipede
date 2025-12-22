@@ -1,5 +1,7 @@
 # **Introduction**
-Recreating Centipede served as an excercise to practice application of Object Oriented Programming, as it utilizes inheritance, abstraction, and encapsulation across many classes and objects. In this Description I plan to go over attributes of my Centipede program as well as the many ways I used design patterns to increase effciency.
+Recreating Centipede served as an excercise to practice application of Object Oriented Programming, as it utilizes inheritance, abstraction, and encapsulation across many classes and objects. In this Description I plan to go over attributes of my Centipede program as well how I used design patterns to increase effciency.
+
+My Professor made a system to manage the objects and their destruction, as well as systems for collision, scenes, and alarms, while I created and implemented all the systems explicitly for managaing the characters and object, sound, score, and HUD (I made all the files listed in the 'scr' file provided).
 
 # Design Patterns Used
 Singletons - Used across multiple systems including Mushroom Manager, Factories, and Score
@@ -152,3 +154,36 @@ void MyPlayer::Alarm4()
 	SetAlarm(4, secs);
 }
 ```
+
+## Finite State Machine 
+Similar to the Stategy Pattern I used an FSM to prevent consistent calls to unneeded 'if' statements each frame for the centipede's movement. In the Centipede's FSM it checks for if the space in front is blocked by a mushroom, letter, or the end of the window, and changes the Centipede's current movement state. For example, if it's current state is Straight Left, but a mushroom is blocking it the FSM will change the Centipede's state to Turn Down Left or Turn Down Right, depending on it's direction. 
+
+In total my Centipede had 11 different states, each with a few if statements of their own. Using an 'if' statement to check what state the Centipede is in each frame would be incredibly inefficient as the Centipede will only be in one state at a time.
+
+*CentipedeHead.cpp*
+```C++
+void CentipedeHead::Update() //Updates 60 frames per a second
+{
+	//Gets the current offsets
+	pos.x += pCurrentState->GetMoveOffsets()->set.values[ind].x * Speed;
+	pos.y += pCurrentState->GetMoveOffsets()->set.values[ind].y * Speed;
+
+	ind += Speed;
+
+	//Since Centipede the game functions on a grid, the Centipede only needs to change it's state when it enters the next cell in the grid
+	if (ind >= SizeW) //SizeW is the Size of each cell on the grid
+	{
+		Row = (int)pos.x / SizeW;
+		Col = (int)pos.y / SizeW;
+
+		SendState(pCurrentState); //Sends the previous state to the segment behind it
+		pCurrentState = pCurrentState->GetNextState(this); //Calls the FSM accessing the next State
+
+		ind = 0;
+	}
+}
+```
+
+## Command Pattern 
+###Score Example
+
