@@ -1,7 +1,7 @@
 # **Introduction**
 Recreating Centipede served as an excercise to practice application of Object Oriented Programming, as it utilizes inheritance, abstraction, and encapsulation across many classes and objects. In this Description I plan to go over attributes of my Centipede program as well how I used design patterns to increase effciency.
 
-My Professor made a system to manage the objects and their destruction, as well as systems for collision, scenes, and alarms, while I created and implemented all the systems explicitly for managaing the characters and object, sound, score, and HUD (I made all the files listed in the 'scr' file provided).
+My Professor made a system (basically a small "engine") to manage the objects and their destruction, as well as systems for collision, scenes, and alarms, while I created and implemented all the systems explicitly for managaing the characters and object, sound, score, and HUD (I made all the files listed in the 'scr' file provided).
 
 # Design Patterns Used
 Singletons - Used across multiple systems including Mushroom Manager, Factories, and Score
@@ -184,6 +184,60 @@ void CentipedeHead::Update() //Updates 60 frames per a second
 
 ## Command Pattern 
 ### Score Example
+When a mushroom or enemy is destroyed in Centipede the player receives points. There is an individual amount of points for when a mushroom or enemy is destroyed. In order to decouple these scores from the score manager and the requesting class I used the Command Pattern to turn these scores into objects. This allows each score to be assigned to their coorisponding entity, so when destroyed it can easily access the score associated with it. 
 
+Also there are two types of scores: a single score (the enemy has a single set score, that will always be the same) or a score by distance between the enemy and player (Only the spider gets scored this way). I made these two types children of the class CmdScore.
+
+*ScoreManager.cpp*
+```C++
+CmdScore* ScoreManager::GetScoreCommand(int i)
+{
+	CmdScore* pCmd = nullptr;
+
+	ScoreEvents ev = (ScoreEvents)i;
+
+	switch (ev)
+	{
+	case ScoreEvents::FleaKilled:
+		pCmd = myFactory->CreateScore(FleaDeath);
+		break;
+	case ScoreEvents::ScorpionKilled:
+		pCmd = myFactory->CreateScore(ScorpionDeath);
+		break;
+	case ScoreEvents::MushroomKilled:
+		pCmd = myFactory->CreateScore(MushroomDeath);
+		break;
+	case ScoreEvents::SpiderKilled:
+		pCmd = myFactory->CreateScore(SpiderDistNear, SpiderDistMedium, SpiderDistFar,
+			SpiderDeathNear, SpiderDeathMedium, SpiderDeathFar);
+		break;
+	case ScoreEvents::MushroomPoisonKilled:
+		pCmd = myFactory->CreateScore(MushroomPoisonDeath);
+		break;
+	case ScoreEvents::HeadKilled:
+		pCmd = myFactory->CreateScore(HeadDeath);
+		break;
+	case ScoreEvents::SegmentKilled:
+		pCmd = myFactory->CreateScore(SegmentDeath);
+		break;
+	}
+
+	return pCmd;
+}
+
+void ScoreManager::ProcessScores()
+{
+	CmdScore* c;
+
+	while (!QueueCmds.empty())
+	{
+		c = QueueCmds.front();
+		c->Execute();
+
+		QueueCmds.pop();
+	}
+
+}
+```
 
 
