@@ -1,7 +1,7 @@
 # **Introduction**
 Recreating Centipede served as an excercise to practice application of Object Oriented Programming, as it utilizes inheritance, abstraction, and encapsulation across many classes and objects. In this Description I plan to go over attributes of my Centipede program as well how I used design patterns to increase effciency.
 
-My Professor made a system (basically a small "engine") to manage the objects and their destruction, as well as systems for collision, scenes, and alarms, while I created and implemented all the systems explicitly for managaing the characters and object, sound, score, and HUD (I made all the files listed in the 'scr' file provided).
+My Professor made a system (basically a small "engine") to manage the objects and their destruction, as well as systems for collision, scenes, and alarms, while I created and implemented all the systems explicitly for managaing the characters and object, sound, score, and HUD (I made all the files listed in the 'scr' file provided). 
 
 # Design Patterns Used
 Singletons - Used across multiple systems including Mushroom Manager, Factories, and Score
@@ -239,5 +239,15 @@ void ScoreManager::ProcessScores()
 
 }
 ```
+
+#Areas for Future Improvement
+- I want to reduce the tight coupling I created with the number of Singletons I used across this project. I plan to do this by tying current singleton classes,
+  such as HUD to the core class, the Game Manager. By connecting smaller classes to core systems I can create more centralized communication throughout
+  game, allowing for a more clear and robust system design. 
+
+- I want to simplify and seperate certain classes into smaller ones. For instance, I used a class called "Critter Manager" to manage the creation, deletion, and data on the
+  various entities on screen. At first this class was fine, but as I programmed more this class became larger and larger, taking on more responsiblities than it should. I plan
+  to do this by creating other classes, such as a CentipedeGenerator to specifically be in charge of the creation and managment of anything relating to the Centipede. 
+  
 
 
