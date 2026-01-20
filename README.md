@@ -240,7 +240,7 @@ void ScoreManager::ProcessScores()
 }
 ```
 
-#Areas for Future Improvement
+# Areas for Future Improvement
 - I want to reduce the tight coupling I created with the number of Singletons I used across this project. I plan to do this by tying current singleton classes,
   such as HUD to the core class, the Game Manager. By connecting smaller classes to core systems I can create more centralized communication throughout
   game, allowing for a more clear and robust system design. 
